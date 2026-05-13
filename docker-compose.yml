@@ -1,0 +1,46 @@
+services:
+  # Servicio para el Backend de Ventas
+  back-ventas:
+    build: ./back-Ventas_SpringBoot
+    container_name: back-ventas-container
+    networks:
+      - innovatech-net
+    environment:
+      - SERVER_PORT=8080
+    # Reiniciar automáticamente si falla
+    restart: always
+
+  # Servicio para el Backend de Despachos
+  back-despachos:
+    build: ./back-Despachos_SpringBoot
+    container_name: back-despachos-container
+    networks:
+      - innovatech-net
+    # IE3: Persistencia de datos crítica [cite: 33, 98]
+    volumes:
+      - despachos_data:/app/data
+    environment:
+      - SERVER_PORT=8080
+    restart: always
+
+  # Servicio para el Frontend (React/Vite)
+  front-despacho:
+    build: ./front_despacho
+    container_name: front-despacho-container
+    ports:
+      - [cite_start]"80:80" # Expone el puerto 80 al exterior [cite: 31, 122]
+    depends_on:
+      - back-ventas
+      - back-despachos
+    networks:
+      - innovatech-net
+    restart: always
+
+# Definición de Redes para comunicación interna 
+networks:
+  innovatech-net:
+    driver: bridge
+
+# IE2/IE3: Definición de Volúmenes Nombrados para persistencia [cite: 33, 99, 157]
+volumes:
+  despachos_data:
