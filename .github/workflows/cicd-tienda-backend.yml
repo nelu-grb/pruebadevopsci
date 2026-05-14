@@ -2,7 +2,7 @@ name: CI/CD Tienda Perritos - Backend
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "deploy" ]
     paths:
       - "backend/**"
 
@@ -44,6 +44,6 @@ jobs:
             "docker pull ${{ secrets.ECR_REPO_URL_BACKEND }}:latest",
             "docker stop tienda-backend || true",
             "docker rm tienda-backend || true",
-            "docker run -d --name tienda-backend -p 3001:3001 ${{ secrets.ECR_REPO_URL_BACKEND }}:latest"
+            "docker run -d --name tienda-backend -p 8080:8080 -v despachos_data:/app/data ${{ secrets.ECR_REPO_URL_BACKEND }}:latest"
           ]}' \
           --output text

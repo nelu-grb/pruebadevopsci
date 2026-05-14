@@ -1,0 +1,11 @@
+FROM mysql:8.0
+
+# Variables de entorno para coincidir con tu script
+ENV MYSQL_DATABASE=tienda_perritos
+ENV MYSQL_ROOT_PASSWORD=root_password 
+
+# REQUERIMIENTO CLAVE: Copiar el script a esta carpeta específica.
+# MySQL ejecuta automáticamente cualquier .sql que esté en este directorio al iniciar.
+COPY ./init.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 3306
