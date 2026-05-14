@@ -10,7 +10,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # ETAPA 2: Ejecución (Runtime) - Imagen ligera
-FROM openjdk:17-jdk-slim
+FROM amazoncorretto:17-alpine
 WORKDIR /app
 
 # REQUERIMIENTO IE1: Usuario no root por seguridad
