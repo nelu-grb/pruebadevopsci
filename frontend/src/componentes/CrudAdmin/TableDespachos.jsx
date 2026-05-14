@@ -3,12 +3,16 @@ import axios from "axios";
 import { Modal } from "./Modal";
 import { FormCierreDespacho } from "./FormCierreDespacho";
 
+
+const urlbaseventas = import.meta.env.VITE_API_URL_VENTAS || "http://192.168.30/api/v1/ventas";
+const urlbasedespachos = import.meta.env.VITE_API_URL_DESPACHOS || "http://192.168.320/api/v1/despachos";
+
 export const TableDespachos = () => {
   const [despachos, setDespachos] = useState([]);
 
   const despacho = async () => {
     await axios
-      .get("http://192.168.3.20/api/v1/despachos", {
+      .get(`${urlbasedespachos}`, {
         headers:{
               'Content-Type': 'application/json',
               'Accept': 'application/json'

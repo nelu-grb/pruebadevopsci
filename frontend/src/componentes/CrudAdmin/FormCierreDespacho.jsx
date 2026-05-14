@@ -2,6 +2,10 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import axios from "axios";
 
+
+const urlbaseventas = import.meta.env.VITE_API_URL_VENTAS || "http://192.168.30/api/v1/ventas";
+const urlbasedespachos = import.meta.env.VITE_API_URL_DESPACHOS || "http://192.168.320/api/v1/despachos";
+
 export const FormCierreDespacho = ({ despacho, onClose }) => {
   const { register, handleSubmit } = useForm();
 
@@ -16,7 +20,7 @@ export const FormCierreDespacho = ({ despacho, onClose }) => {
 
     try {
       await axios.put(
-        `http://192.168.320/api/v1/despachos/${despacho.idDespacho}`,
+        `${urlbasedespachos}/${despacho.idDespacho}`,
         jsonData,
         {
           headers:{
