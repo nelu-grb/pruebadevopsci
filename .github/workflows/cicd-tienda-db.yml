@@ -28,8 +28,8 @@ jobs:
     - name: Build imagen DB y push a ECR
       run: |
         cd db
-        docker build -t tienda-db .
-        docker tag tienda-db:latest ${{ secrets.ECR_REPO_URL_DB }}:latest
+        docker build -t tienda-db-cdci .
+        docker tag tienda-db-cdci:latest ${{ secrets.ECR_REPO_URL_DB }}:latest
         docker push ${{ secrets.ECR_REPO_URL_DB }}:latest
 
     - name: Desplegar DB vía SSM
@@ -42,8 +42,8 @@ jobs:
             "set -e",
             "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}",
             "docker pull ${{ secrets.ECR_REPO_URL_DB }}:latest",
-            "docker stop tienda-db || true",
-            "docker rm tienda-db || true",
-            "docker run -d --name tienda-db -p 3306:3306 -v dbdata:/var/lib/mysql ${{ secrets.ECR_REPO_URL_DB }}:latest"
+            "docker stop tienda-db-cdci || true",
+            "docker rm tienda-db-cdci || true",
+            "docker run -d --name tienda-db-cdci -p 3306:3306 -v dbdata:/var/lib/mysql ${{ secrets.ECR_REPO_URL_DB }}:latest"
           ]}' \
           --output text

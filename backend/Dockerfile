@@ -3,14 +3,14 @@ FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 
 # Copiar archivos de configuración y código fuente
-COPY pom.xml .
-COPY src ./src
+COPY Springboot-API-REST-DESPACHO/pom.xml .
+COPY Springboot-API-REST-DESPACHO/src ./src
 
 # Compilar y empaquetar el proyecto saltando los tests para velocidad
 RUN mvn clean package -DskipTests
 
 # ETAPA 2: Ejecución (Runtime) - Imagen ligera
-FROM openjdk:17-jdk-slim
+FROM amazoncorretto:17-alpine
 WORKDIR /app
 
 # REQUERIMIENTO IE1: Usuario no root por seguridad
