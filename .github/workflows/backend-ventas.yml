@@ -1,0 +1,56 @@
+name: CI/CD Tienda Perritos - Backend Ventas
+
+on:
+  push:
+    branches: [ "deploy" ]
+    paths:
+      - "backend/ventas/**" # Ejecutar solo si cambia el código de ventas
+  workflow_dispatch: # Permite ejecutarlo manualmente desde GitHub
+
+jobs:
+  build-push-deploy-ventas:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Configurar credenciales AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login en Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build y Push con Cache (Ventas)
+      run: |
+        cd backend # Ajusta la ruta exacta a tu carpeta de Ventas si es diferente
+        
+        docker pull 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest || true
+        
+        docker build \
+          --cache-from 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest \
+          -t tienda-ventas .
+          
+        docker tag tienda-ventas:latest 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest
+        docker push 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest
+
+    - name: Desplegar Ventas vía SSM
+      run: |
+        aws ssm send-command \
+          --instance-ids i-034bd9a033015269a \
+          --document-name "AWS-RunShellScript" \
+          --comment "Actualizar tienda-ventas desde ECR" \
+          --parameters '{"commands":[
+            "set -e",
+            "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 481358287898.dkr.ecr.us-east-1.amazonaws.com",
+            "docker pull 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest",
+            "docker stop tienda-ventas || true",
+            "docker rm tienda-ventas || true",
+            "docker run -d --name tienda-ventas -p 8080:8080 -e DB_ENDPOINT=172.31.27.171 -e DB_PORT=3306 -e DB_NAME=tienda_perritos -e DB_USER=root -e DB_PASS=root_password 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest"
+          ]}' \
+          --output text
