@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "deploy" ]
     paths:
-      - "backend/despachos/**" # Ejecutar solo si cambia despachos
+      - "backend-despachos/**" # Ejecutar solo si cambia despachos
   workflow_dispatch:
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
 
     - name: Build y Push con Cache (Despachos)
       run: |
-        cd backend # Ajusta la ruta exacta a tu carpeta de Despachos si es diferente
+        cd backend-despachos # Ajusta la ruta exacta a tu carpeta de Despachos si es diferente
         
         docker pull 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-despachos:latest || true
         
