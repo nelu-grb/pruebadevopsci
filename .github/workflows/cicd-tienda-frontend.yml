@@ -5,6 +5,7 @@ on:
     branches: [ "deploy" ]
     paths:
       - "frontend/**"
+  workflow_dispatch:
 
 jobs:
   build-push-deploy-frontend:
@@ -12,7 +13,7 @@ jobs:
 
     steps:
     - name: Checkout código
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configurar credenciales AWS
       uses: aws-actions/configure-aws-credentials@v4
@@ -23,12 +24,15 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Login en Amazon ECR (runner)
-      uses: aws-actions/amazon-ecr-login@v1
+      uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build imagen Frontend y push a ECR
+    - name: Build imagen Frontend y push a ECR  (con cache)
       run: |
         cd frontend
-        docker build -t tienda-frontend .
+        docker pull ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest || true
+
+        # Build usando cache para ir más rápido
+        docker build --cache-from ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest \-t tienda-frontend .
         docker tag tienda-frontend:latest ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
         docker push ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
 
