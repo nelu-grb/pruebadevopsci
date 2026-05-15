@@ -32,6 +32,22 @@ jobs:
         docker tag tienda-db-cdci:latest ${{ secrets.ECR_REPO_URL_DB }}:latest
         docker push ${{ secrets.ECR_REPO_URL_DB }}:latest
 
+    - name: Build y Push con Cache
+      run: |
+        cd db
+        # Intentamos descargar la versión anterior de la DB desde ECR
+        docker pull ${{ secrets.ECR_REPO_URL_DB }}:latest || true
+        
+        # Build usando la imagen anterior como cache
+        docker build \
+          --cache-from ${{ secrets.ECR_REPO_URL_DB }}:latest \
+          -t tienda-db-cdci .
+          
+        # Etiquetado y subida final
+        docker tag tienda-db-cdci:latest ${{ secrets.ECR_REPO_URL_DB }}:latest
+        docker push ${{ secrets.ECR_REPO_URL_DB }}:latest
+
+
     - name: Desplegar DB vía SSM
       run: |
         aws ssm send-command \
