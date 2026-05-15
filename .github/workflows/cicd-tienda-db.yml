@@ -25,13 +25,6 @@ jobs:
     - name: Login en Amazon ECR (runner)
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build imagen DB y push a ECR
-      run: |
-        cd db
-        docker build -t tienda-db-cdci .
-        docker tag tienda-db-cdci:latest ${{ secrets.ECR_REPO_URL_DB }}:latest
-        docker push ${{ secrets.ECR_REPO_URL_DB }}:latest
-
     - name: Build y Push con Cache
       run: |
         cd db
