@@ -3,8 +3,8 @@ import Swal from "sweetalert2";
 import axios from "axios";
 
 
-const urlbaseventas = import.meta.env.VITE_API_URL_VENTAS || "http://192.168.30/api/v1/ventas";
-const urlbasedespachos = import.meta.env.VITE_API_URL_DESPACHOS || "http://192.168.320/api/v1/despachos";
+const urlbaseventas = import.meta.env.VITE_API_URL_VENTAS;
+const urlbasedespachos = import.meta.env.VITE_API_URL_DESPACHOS;
 
 export const FormDespacho = ({ venta, onClose }) => {
   const { register, handleSubmit } = useForm();
