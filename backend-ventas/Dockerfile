@@ -2,9 +2,9 @@
 FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 
-# Copiar archivos de configuración y código fuente directamente desde la raíz del microservicio
-COPY pom.xml .
-COPY src ./src
+# Copiar apuntando a la subcarpeta real del proyecto
+COPY Springboot-API-REST/pom.xml .
+COPY Springboot-API-REST/src ./src
 
 # Compilar y empaquetar el proyecto saltando los tests para velocidad
 RUN mvn clean package -DskipTests

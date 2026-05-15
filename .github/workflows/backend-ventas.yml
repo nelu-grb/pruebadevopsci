@@ -28,7 +28,7 @@ jobs:
 
     - name: Build y Push con Cache (Ventas)
       run: |
-        cd backend-ventas # Ajusta la ruta exacta a tu carpeta de Ventas si es diferente
+        cd backend-ventas
         
         docker pull 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest || true
         
