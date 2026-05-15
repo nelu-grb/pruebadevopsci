@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "deploy" ]
     paths:
-      - "backend/ventas/**" # Ejecutar solo si cambia el código de ventas
+      - "backend-ventas/**" # Ejecutar solo si cambia el código de ventas
   workflow_dispatch: # Permite ejecutarlo manualmente desde GitHub
 
 jobs:
