@@ -1,4 +1,4 @@
-package main.java.com.citt.model;
+package com.citt.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

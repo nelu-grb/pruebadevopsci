@@ -1,4 +1,4 @@
-package main.java.com.citt.persistence.repository; // Asegúrate de que el package coincida con tu carpeta
+package com.citt.persistence.repository; // Asegúrate de que el package coincida con tu carpeta
 
 import com.citt.model.Usuario; // Importas tu modelo
 import org.springframework.data.jpa.repository.JpaRepository; // Importas la herramienta
