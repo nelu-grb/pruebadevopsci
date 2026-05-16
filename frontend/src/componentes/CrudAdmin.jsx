@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Navbar from './Layouts/Navbar';
-import { TableDespachos } from './TableDespachos'; // Tu tabla actual de despachos
-import { TableUsuarios } from './TableUsuarios';   // La que crearemos abajo
-import { TableProductos } from './TableProductos';  // La que crearemos abajo
+import { TableDespachos } from './CrudAdmin/TableDespachos';
+import { TableUsuarios } from './CrudAdmin/TableUsuarios';
+import { TableProductos } from './CrudAdmin/TableProductos'; 
+
+
 
 export const CrudAdmin = () => {
   // Estado para controlar qué pestaña ve el usuario en el centro
