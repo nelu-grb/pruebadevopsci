@@ -1,27 +1,42 @@
-import Navbar from "./Layouts/Navbar";
-import Footer from "./Layouts/Footer";
-
-import { PruebaCards } from "./CrudAdmin/PruebaCards";
-import Reviews from "./Layouts/Reviews";
+import React, { useState } from 'react';
+import Navbar from './Layouts/Navbar';
+import { TableDespachos } from './TableDespachos'; // Tu tabla actual de despachos
+import { TableUsuarios } from './TableUsuarios';   // La que crearemos abajo
+import { TableProductos } from './TableProductos';  // La que crearemos abajo
 
 export const CrudAdmin = () => {
-  return (
-    <>
-      <div className="grid grid-cols-[auto_1fr] min-h-screen bg-gray-50">
-        <div className="col-span-1">
-          {/* Columna 1: Navbar (ancho fijo) */}
-          <Navbar />
-        </div>
+  // Estado para controlar qué pestaña ve el usuario en el centro
+  const [vistaActual, setVistaActual] = useState('despachos'); 
 
-        {/* Columna 2: Contenido principal (ocupa el espacio restante) */}
-        <div className="overflow-y-auto p-6">
-          {" "}
-          {/* Por si el contenido es muy largo */}
-          <PruebaCards />
-          <Reviews />
-          <Footer />
-        </div>
+  // Función que decide qué componente se dibuja en el espacio blanco
+  const renderContenidoCentral = () => {
+    switch (vistaActual) {
+      case 'usuarios':
+        return <TableUsuarios />;
+      case 'productos':
+        return <TableProductos />;
+      case 'configuracion':
+        return <div className="p-6 bg-white rounded-xl shadow">⚙️ Panel de Configuración</div>;
+      case 'despachos':
+      default:
+        return (
+          <>
+            {/* Aquí van tus dos tarjetas actuales de "Consultar OC" y "Revisar Despachos" */}
+            {/* Y aquí abajo pones tu <TableDespachos /> actual */}
+          </>
+        );
+    }
+  };
+
+  return (
+    <div className="flex bg-gray-100 min-h-screen">
+      {/* Le pasamos el estado al Navbar para que pueda cambiarlo */}
+      <Navbar vistaActual={vistaActual} setVistaActual={setVistaActual} />
+      
+      {/* El contenido de la derecha cambia automáticamente */}
+      <div className="flex-1 p-4">
+        {renderContenidoCentral()}
       </div>
-    </>
+    </div>
   );
 };
