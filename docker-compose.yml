@@ -42,9 +42,12 @@ services:
     depends_on:
       - tienda-db-cdci
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://tienda-db-cdci:3306/tienda_ventas_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root_password
+      # Inyectamos de forma separada las variables exactas que tu código espera leer
+      - DB_ENDPOINT=tienda-db-cdci
+      - DB_PORT=3306
+      - DB_NAME=tienda_ventas_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root_password
     restart: always
 
   # Microservicio de Despachos
@@ -58,9 +61,12 @@ services:
     depends_on:
       - tienda-db-despachos
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://tienda-db-despachos:3306/tienda_despachos_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root_password
+      # Inyectamos de forma separada las variables exactas que tu código espera leer
+      - DB_ENDPOINT=tienda-db-despachos
+      - DB_PORT=3306
+      - DB_NAME=tienda_despachos_db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root_password
     restart: always
 
   # Frontend del Sistema
