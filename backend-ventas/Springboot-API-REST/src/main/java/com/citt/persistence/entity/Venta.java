@@ -6,9 +6,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
+@Builder
 @Entity
 public class Venta {
     @Id
