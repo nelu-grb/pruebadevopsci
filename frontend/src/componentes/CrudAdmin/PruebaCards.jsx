@@ -1,39 +1,61 @@
-import { useState } from "react";
-import { CardComponent } from "./CardComponent";
-import { TableCompras } from "./TableCompras";
-import { TableDespachos } from "./TableDespachos";
+import React, { useState } from 'react';
+import Navbar from './Layouts/Navbar';
+import { TableUsuarios } from './CrudAdmin/TableUsuarios';
+import { TableProductos } from './CrudAdmin/TableProductos'; 
+import Footer from "./Layouts/Footer";
+import { PruebaCards } from "./CrudAdmin/PruebaCards";
 
-export const PruebaCards = () => {
-  const [tablaCompras, setTablaCompras] = useState(false);
-  const [tablaOrdenes, setTablaOrdenes] = useState(false);
+export const CrudAdmin = () => {
+  // Estado para controlar qué pestaña ve el usuario en el menú lateral
+  const [vistaActual, setVistaActual] = useState('despachos'); 
+
+  // Función que decide qué componente se dibuja en el espacio blanco de la derecha
+  const renderContenidoCentral = () => {
+    switch (vistaActual) {
+      case 'usuarios':
+        return (
+          <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <TableUsuarios />
+          </div>
+        );
+      case 'productos':
+        return (
+          <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+            <TableProductos />
+          </div>
+        );
+      case 'configuracion':
+        return (
+          <div className="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 m-4 font-bold text-gray-700">
+            ⚙️ Panel de Configuración del Sistema
+          </div>
+        );
+      
+      case 'despachos':
+      default:
+        return (
+          // Este div w-full le da la fuerza a PruebaCards para que sus tablas se estiren al 100%
+          <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-6 overflow-x-auto">
+            <PruebaCards />
+          </div>
+        );
+    }
+  };
 
   return (
-    <section>
-      <div className="flex justify-center">
-        <CardComponent
-          title="Consultar Ordenes de compra 💰"
-          description="Revisa las últimas oc realizadas para generar su despacho"
-          buttonText="Consultar"
-          onClick={() => {
-            setTablaCompras(true);
-            setTablaOrdenes(false);
-          }}
-        />
-        <CardComponent
-          title="Revisar Ordenes de despacho 🚚"
-          description="Consulta los despachos realizados, modifica los registros de intentos o cierra la orden"
-          buttonText="Consultar"
-          onClick={() => {
-            setTablaCompras(false);
-            setTablaOrdenes(true);
-          }}
-        />
+    <div className="flex bg-gray-50 min-h-screen w-full font-sans antialiased">
+      {/* Barra de Navegación Lateral */}
+      <Navbar vistaActual={vistaActual} setVistaActual={setVistaActual} />
+      
+      {/* Contenedor Principal de Contenido (Lado Derecho) */}
+      <div className="flex-1 flex flex-col min-w-0">
+        <main className="flex-grow p-8 flex justify-center">
+          {renderContenidoCentral()}
+        </main>
+        
+        {/* Footer al final */}
+        <Footer />
       </div>
-
-      <section>
-        {tablaCompras && <TableCompras />}
-        {tablaOrdenes && <TableDespachos />}
-      </section>
-    </section>
+    </div>
   );
 };
