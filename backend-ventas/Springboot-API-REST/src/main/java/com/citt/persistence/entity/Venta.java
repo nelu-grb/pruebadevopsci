@@ -6,25 +6,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.LocalDate;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonProperty("idVenta")
     private Long idVenta;
     
     @NotBlank(message = "La dirección es obligatoria")
@@ -33,18 +21,36 @@ public class Venta {
     private int valorCompra;
     
     @NotNull(message = "Fecha de compra es obligatoria")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  // Especifica el formato de fecha
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate fechaCompra;
     
     @NotNull(message = "El campo de despacho debe ser proporcionado")
     private Boolean despachoGenerado = false;
 
-    // Métodos manuales explícitos para romper el conflicto de Lombok con Boolean en la nube
-    public Boolean getDespachoGenerado() {
-        return this.despachoGenerado;
-    }
+    // CONSTRUCTORES MANUALES (Para suplir NoArgsConstructor y AllArgsConstructor)
+    public Venta() {}
 
-    public void setDespachoGenerado(Boolean despachoGenerado) {
+    public Venta(Long idVenta, String direccionCompra, int valorCompra, LocalDate fechaCompra, Boolean despachoGenerado) {
+        this.idVenta = idVenta;
+        this.direccionCompra = direccionCompra;
+        this.valorCompra = valorCompra;
+        this.fechaCompra = fechaCompra;
         this.despachoGenerado = despachoGenerado;
     }
+
+    // GETTERS Y SETTERS EXPLÍCITOS (La solución definitiva para Maven)
+    public Long getIdVenta() { return idVenta; }
+    public void setIdVenta(Long idVenta) { this.idVenta = idVenta; }
+
+    public String getDireccionCompra() { return direccionCompra; }
+    public void setDireccionCompra(String direccionCompra) { this.direccionCompra = direccionCompra; }
+
+    public int getValorCompra() { return valorCompra; }
+    public void setValorCompra(int valorCompra) { this.valorCompra = valorCompra; }
+
+    public LocalDate getFechaCompra() { return fechaCompra; }
+    public void setFechaCompra(LocalDate fechaCompra) { this.fechaCompra = fechaCompra; }
+
+    public Boolean getDespachoGenerado() { return despachoGenerado; }
+    public void setDespachoGenerado(Boolean despachoGenerado) { this.despachoGenerado = despachoGenerado; }
 }
