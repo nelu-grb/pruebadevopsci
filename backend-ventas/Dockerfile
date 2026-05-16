@@ -7,7 +7,7 @@ COPY Springboot-API-REST/pom.xml .
 COPY Springboot-API-REST/src ./src
 
 # Compilar y empaquetar el proyecto saltando los tests para velocidad
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests -Dmaven.test.skip=true
 
 # ETAPA 2: Ejecución (Runtime) - Imagen ligera
 FROM amazoncorretto:17-alpine
