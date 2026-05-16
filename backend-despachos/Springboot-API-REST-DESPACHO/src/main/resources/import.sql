@@ -1,3 +1,4 @@
-INSERT INTO despacho (id_compra, direccion_compra, fecha_despacho, patente_camion, valor_compra, despachado, intento) VALUES (10024, 'Av. Concha y Toro 3456, Puente Alto', '2026-05-16', 'KNDS-42', 24990, 0, 1);
-INSERT INTO despacho (id_compra, direccion_compra, fecha_despacho, patente_camion, valor_compra, despachado, intento) VALUES (10025, 'Vicuña Mackenna 456, La Florida', '2026-05-16', 'FGRT-89', 5990, 1, 1);
-INSERT INTO despacho (id_compra, direccion_compra, fecha_despacho, patente_camion, valor_compra, despachado, intento) VALUES (10026, 'Alameda 1020, Santiago Centro', '2026-05-15', 'PLMZ-12', 3490, 0, 0);
+INSERT INTO despacho (fecha_despacho, patente_camion, intento, id_compra, direccion_compra, valor_compra, despachado) VALUES 
+('2026-05-16', 'HG-TL-84', 1, 1, 'Av. Vicuña Mackenna 4860, San Joaquín', 25990.00, 1),
+('2026-05-16', 'FT-XW-12', 2, 2, 'Pasaje El Romeral 124, La Florida', 12450.00, 1),
+('2026-05-16', 'HG-TL-84', 1, 3, 'Calle Las Brisas 890, Puente Alto', 45800.00, 0);
