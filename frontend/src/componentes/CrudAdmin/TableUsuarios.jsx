@@ -5,8 +5,7 @@ export const TableUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    axios.get('http://54.242.30.1:8080/api/v1/usuarios') // Tu IP de Ventas
-      .then(res => setUsuarios(res.data || []))
+    axios.get(`${import.meta.env.VITE_API_URL_VENTAS}/usuarios`)      .then(res => setUsuarios(res.data || []))
       .catch(err => console.error(err));
   }, []);
 

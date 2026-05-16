@@ -5,8 +5,7 @@ export const TableProductos = () => {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    axios.get('http://54.242.30.1:8080/api/v1/productos') // Tu IP de Ventas
-      .then(res => setProductos(res.data || []))
+    axios.get(`${import.meta.env.VITE_API_URL_VENTAS}/productos`)      .then(res => setProductos(res.data || []))
       .catch(err => console.error(err));
   }, []);
 
