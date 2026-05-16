@@ -227,7 +227,7 @@ docker build -t tienda-frontend .
 docker-compose up --build
 ```
 
-> Nota: El `docker-compose.yml` actual tiene rutas de build que no coinciden con los nombres reales de las carpetas (`backend-ventas` / `backend-despachos` vs `back-Ventas_SpringBoot` / `back-Despachos_SpringBoot`). Debe corregirse para poder ejecutar el stack completo.
+> Nota: El `docker-compose.yml` usa ahora rutas de build coherentes con las carpetas reales del repositorio (`backend-ventas`, `backend-despachos`, `frontend`).
 
 ## 19. Swagger/OpenAPI si existe
 
@@ -245,18 +245,5 @@ El proyecto implementa una arquitectura de microservicios con frontend React, se
 - CI/CD con AWS ECR y despliegue remoto por SSM.
 - Documentación de API con SpringDoc/OpenAPI.
 
-### Oportunidades de mejora
-- Falta de autenticación y autorización real (no hay JWT).
-- Configuración de CORS demasiado abierta.
-- Inconsistencias en `docker-compose.yml` y en nombres de rutas.
-- Variables de entorno del frontend (`VITE_API_URL_VENTAS`) no coinciden con las rutas de servicio usadas en algunos endpoints.
-- No existe infraestructura IaC para AWS.
 
-## Problemas detectados que pueden afectar evaluación
 
-1. `docker-compose.yml` no apunta a las carpetas reales del repositorio.
-2. El frontend usa `VITE_API_URL_VENTAS` con un endpoint que ya contiene `/api/v1/ventas`, lo que provoca rutas incorrectas para usuarios y productos.
-3. No se detectó implementación de **JWT** ni seguridad basada en tokens.
-4. El despliegue de `backend-despachos` en GitHub Actions mapea `-p 8080:8080` cuando el servicio interno escucha en `8081`.
-
-> Estas discrepancias deben corregirse para que la solución sea funcional y la evaluación DevOps/arquitectura sea consistente.

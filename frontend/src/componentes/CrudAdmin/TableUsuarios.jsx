@@ -5,7 +5,8 @@ export const TableUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL_VENTAS}/usuarios`)      .then(res => setUsuarios(res.data || []))
+    axios.get(`${import.meta.env.VITE_API_URL_BASE}/usuarios`)
+      .then(res => setUsuarios(res.data || []))
       .catch(err => console.error(err));
   }, []);
 

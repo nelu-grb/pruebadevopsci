@@ -5,7 +5,8 @@ export const TableProductos = () => {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL_VENTAS}/productos`)      .then(res => setProductos(res.data || []))
+    axios.get(`${import.meta.env.VITE_API_URL_BASE}/productos`)
+      .then(res => setProductos(res.data || []))
       .catch(err => console.error(err));
   }, []);
 

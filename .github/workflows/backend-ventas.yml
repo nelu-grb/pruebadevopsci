@@ -51,6 +51,6 @@ jobs:
             "docker pull 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest",
             "docker stop tienda-ventas || true",
             "docker rm tienda-ventas || true",
-            "docker run -d --name tienda-ventas -p 8080:8080 -e DB_ENDPOINT=172.31.27.171 -e DB_PORT=3306 -e DB_NAME=tienda_perritos -e DB_USER=root -e DB_PASS=root_password 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest"
+            "docker run -d --name tienda-ventas -p 8080:8080 -e DB_ENDPOINT=172.31.27.171 -e DB_PORT=3306 -e DB_NAME=tienda_perritos -e DB_USERNAME=root -e DB_PASSWORD=root_password 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-ventas:latest"
           ]}' \
           --output text

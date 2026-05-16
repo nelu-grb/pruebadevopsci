@@ -51,6 +51,6 @@ jobs:
             "docker pull 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-despachos:latest",
             "docker stop tienda-despachos || true",
             "docker rm tienda-despachos || true",
-            "docker run -d --name tienda-despachos -p 8080:8080 -v despachos_data:/app/data 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-despachos:latest"
+            "docker run -d --name tienda-despachos -p 8082:8081 -e DB_ENDPOINT=172.31.27.171 -e DB_PORT=3306 -e DB_NAME=tienda_despachos_db -e DB_USERNAME=root -e DB_PASSWORD=root_password -v despachos_data:/app/data 481358287898.dkr.ecr.us-east-1.amazonaws.com/back-despachos:latest"
           ]}' \
           --output text

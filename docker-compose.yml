@@ -33,7 +33,7 @@ services:
 
   # Microservicio de Ventas
   back-ventas:
-    build: ./back-Ventas_SpringBoot
+    build: ./backend-ventas
     container_name: back-ventas-container
     ports:
       - "8080:8080" # Tu puerto estándar de Ventas en AWS
@@ -49,7 +49,7 @@ services:
 
   # Microservicio de Despachos
   back-despachos:
-    build: ./back-Despachos_SpringBoot
+    build: ./backend-despachos
     container_name: back-despachos-container
     ports:
       - "8082:8081" # Puerto 8082 en AWS redireccionado al puerto interno 8081
@@ -65,7 +65,7 @@ services:
 
   # Frontend del Sistema
   front-despacho:
-    build: ./front_despacho
+    build: ./frontend
     container_name: front-despacho-container
     ports:
       - "80:80" # Accesible públicamente por el puerto HTTP estándar
