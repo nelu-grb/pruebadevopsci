@@ -1,15 +1,16 @@
-# ETAPA 1: Construcción (Build)
+# Dockerfile para la aplicación Spring Boot - Backend de Ventas
+# (Build)
 FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 
-# Copiar apuntando a la subcarpeta real del proyecto
+# Copiar apuntando a la subcarpeta del proyecto
 COPY Springboot-API-REST/pom.xml .
 COPY Springboot-API-REST/src ./src
 
 # Compilar y empaquetar el proyecto saltando los tests para velocidad
 RUN mvn clean package -DskipTests -Dmaven.test.skip=true
 
-# ETAPA 2: Ejecución (Runtime) - Imagen ligera
+# Ejecución (Runtime) - Imagen ligera
 FROM amazoncorretto:17-alpine
 WORKDIR /app
 
@@ -17,8 +18,8 @@ WORKDIR /app
 RUN addgroup --system spring && adduser --system spring --ingroup spring
 USER spring:spring
 
-# Copiar solo el archivo .jar generado en la etapa anterior
-COPY --from=build /app/target/*.jar app.jar
+# Copiar el archivo .jar asignando la propiedad al usuario no root de inmediato
+COPY --from=build --chown=spring:spring /app/target/*.jar app.jar
 
 # Exponer el puerto por defecto de Spring Boot
 EXPOSE 8080

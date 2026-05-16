@@ -1,50 +1,74 @@
+version: '3.8'
+
 services:
-  # Base de Datos (Requerimiento 2 y 4)
-  db-datos:
-    image: postgres:15-alpine
-    container_name: db-innovatech
+  # Base de Datos VENTAS 
+  tienda-db-cdci:
+    image: mysql:8.0
+    container_name: tienda-db-cdci
+    ports:
+      - "3306:3306"
     environment:
-      POSTGRES_DB: innovatech_db
-      POSTGRES_PASSWORD: admin_password
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: tienda_ventas_db
     networks:
       - innovatech-net
     volumes:
-      - db_persistente:/var/lib/postgresql/data # Persistencia crítica
+      - db_ventas_persistente:/var/lib/mysql # REQUERIMIENTO IE3: Persistencia de Ventas
     restart: always
 
+  # Base de Datos DESPACHOS 
+  tienda-db-despachos:
+    image: mysql:8.0
+    container_name: tienda-db-despachos
+    ports:
+      - "3307:3306" # Puerto 3307 en AWS redireccionado al puerto interno 3306 de MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: tienda_despachos_db
+    networks:
+      - innovatech-net
+    volumes:
+      - db_despachos_persistente:/var/lib/mysql # REQUERIMIENTO IE3: Persistencia de Despachos
+    restart: always
+
+  # Microservicio de Ventas
   back-ventas:
     build: ./back-Ventas_SpringBoot
     container_name: back-ventas-container
     ports:
-      - "8081:8080" # Mapeo para acceso externo/front
+      - "8080:8080" # Tu puerto estándar de Ventas en AWS
     networks:
       - innovatech-net
     depends_on:
-      - db-datos
+      - tienda-db-cdci
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-datos:5432/innovatech_db
+      - SPRING_DATASOURCE_URL=jdbc:mysql://tienda-db-cdci:3306/tienda_ventas_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root_password
     restart: always
 
+  # Microservicio de Despachos
   back-despachos:
     build: ./back-Despachos_SpringBoot
     container_name: back-despachos-container
     ports:
-      - "8080:8080" # Mapeo para acceso externo/front
+      - "8082:8081" # Puerto 8082 en AWS redireccionado al puerto interno 8081
     networks:
       - innovatech-net
     depends_on:
-      - db-datos
-    volumes:
-      - despachos_data:/app/data # Persistencia de archivos/logs
+      - tienda-db-despachos
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-datos:5432/innovatech_db
+      - SPRING_DATASOURCE_URL=jdbc:mysql://tienda-db-despachos:3306/tienda_despachos_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root_password
     restart: always
 
+  # Frontend del Sistema
   front-despacho:
     build: ./front_despacho
     container_name: front-despacho-container
     ports:
-      - "80:80" 
+      - "80:80" # Accesible públicamente por el puerto HTTP estándar
     depends_on:
       - back-ventas
       - back-despachos
@@ -57,5 +81,5 @@ networks:
     driver: bridge
 
 volumes:
-  despachos_data:
-  db_persistente: # Volumen para que la BD no pierda los datos
+  db_ventas_persistente:
+  db_despachos_persistente:
