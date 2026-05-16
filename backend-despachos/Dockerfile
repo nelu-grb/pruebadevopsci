@@ -17,11 +17,11 @@ WORKDIR /app
 RUN addgroup --system spring && adduser --system spring --ingroup spring
 USER spring:spring
 
-# Copiar solo el archivo .jar generado en la etapa anterior
-COPY --from=build /app/target/*.jar app.jar
+# Copiar el archivo .jar asignando la propiedad al usuario no root de inmediato
+COPY --from=build --chown=spring:spring /app/target/*.jar app.jar
 
 # Exponer el puerto por defecto de Spring Boot
-EXPOSE 8080
+EXPOSE 8081
 
 # Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
