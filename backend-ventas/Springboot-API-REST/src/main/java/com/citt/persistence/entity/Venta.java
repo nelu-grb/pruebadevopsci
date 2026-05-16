@@ -12,6 +12,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 
 @Entity
@@ -22,13 +24,27 @@ import java.time.LocalDate;
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty("idVenta")
     private Long idVenta;
+    
     @NotBlank(message = "La dirección es obligatoria")
     private String direccionCompra;
+    
     private int valorCompra;
+    
     @NotNull(message = "Fecha de compra es obligatoria")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  // Especifica el formato de fecha
     private LocalDate fechaCompra;
+    
     @NotNull(message = "El campo de despacho debe ser proporcionado")
     private Boolean despachoGenerado = false;
+
+    // Métodos manuales explícitos para romper el conflicto de Lombok con Boolean en la nube
+    public Boolean getDespachoGenerado() {
+        return this.despachoGenerado;
+    }
+
+    public void setDespachoGenerado(Boolean despachoGenerado) {
+        this.despachoGenerado = despachoGenerado;
+    }
 }
