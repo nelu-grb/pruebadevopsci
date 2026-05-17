@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 // 1. IMPORTA TUS TABLAS MODULARES
 import { TableCompras } from './TableCompras';
 import { TableDespachos } from './TableDespachos';
-// 2. IMPORTA TUS FORMULARIOS (Verifica que los nombres de archivo coincidan)
+// 2. IMPORTA TUS FORMULARIOS
 import { FormDespacho } from './FormDespacho'; 
 import { FormCierreDespacho } from './FormCierreDespacho';
 
@@ -12,6 +13,40 @@ export const PruebaCards = () => {
   
   // Estado clave para controlar qué formulario se abre en el centro ('crear', 'modificar' o null)
   const [mostrarFormulario, setMostrarFormulario] = useState(null); 
+
+  // URL Base mapeada a tu instancia EC2 activa de hoy
+  const API_URL = import.meta.env.VITE_API_URL_BASE;
+
+  // ==========================================
+  // 🛒 FUNCIÓN PARA SIMULAR COMPRA (POST EN VIVO)
+  // ==========================================
+  const handleCrearNuevaVenta = async () => {
+    const direccion = prompt("Ingrese la Dirección de Compra para Innovatech Chile:");
+    if (!direccion) return;
+    const valor = prompt("Ingrese el Valor Total de la transacción (Solo números):");
+    if (!valor) return;
+
+    try {
+      // Petición POST asíncrona directa al microservicio de ventas en AWS
+      await axios.post(`${API_URL}/ventas`, {
+        direccionCompra: direccion,
+        valorCompra: parseInt(valor),
+        fechaCompra: new Date().toISOString().split('T'),
+        despachoGenerado: false // Inicia en false porque es una compra nueva sin camión
+      });
+
+      alert("🛒 ¡Orden de Compra registrada con éxito en AWS! Haz clic en 'Consultar' para verla.");
+      
+      // Si el profesor está mirando la tabla de compras, la refrescamos al instante
+      if (subVista === 'compras') {
+        setSubVista('ninguna');
+        setTimeout(() => setSubVista('compras'), 50);
+      }
+    } catch (err) {
+      console.error("Error al intentar persistir la venta:", err);
+      alert("Error de comunicación con el microservicio de Ventas en AWS");
+    }
+  };
 
   return (
     <div className="w-full space-y-6">
@@ -30,11 +65,12 @@ export const PruebaCards = () => {
             >
               Consultar →
             </button>
+            {/* 🚀 BOTÓN OPTIMIZADO: Ahora ejecuta un POST comercial real en caliente */}
             <button 
-              onClick={() => { setMostrarFormulario('crear'); setSubVista('ninguna'); }}
+              onClick={handleCrearNuevaVenta}
               className="px-4 py-2 bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold rounded-xl text-sm transition-colors"
             >
-              + Asignar Camión
+              + Simular Venta (POST)
             </button>
           </div>
         </div>
@@ -71,6 +107,7 @@ export const PruebaCards = () => {
               <h4 className="text-lg font-bold text-teal-600">🚚 Asignación Logística de Camiones</h4>
               <button onClick={() => setMostrarFormulario(null)} className="text-gray-400 hover:text-gray-600 text-sm">✕ Cerrar</button>
             </div>
+            {/* Al completarse con éxito, te redirige a ver los despachos en ruta */}
             <FormDespacho onSuccess={() => { setMostrarFormulario(null); setSubVista('despachos'); }} />
           </div>
         )}
@@ -79,9 +116,10 @@ export const PruebaCards = () => {
         {mostrarFormulario === 'modificar' && (
           <div className="p-6 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center">
             <div className="w-full flex justify-between items-center mb-4">
-              <h4 className="text-lg font-bold text-amber-600">✏️ Control de Intentos Fallidos</h4>
+              <h4 className="text-lg font-bold text-amber-600">✏️ Control de Intentos Fallidos y Cierre</h4>
               <button onClick={() => setMostrarFormulario(null)} className="text-gray-400 hover:text-gray-600 text-sm">✕ Cerrar</button>
             </div>
+            {/* 🛠️ FIJADO: Al guardar los cambios, te regresa directo a la tabla de despachos manteniendo la vista */}
             <FormCierreDespacho onSuccess={() => { setMostrarFormulario(null); setSubVista('despachos'); }} />
           </div>
         )}
@@ -95,7 +133,7 @@ export const PruebaCards = () => {
         {/* MUESTRA EL TEXTO POR DEFECTO SOLO SI NO HAY NADA ACTIVO */}
         {subVista === 'ninguna' && !mostrarFormulario && (
           <div className="text-center p-12 text-gray-400 border-2 border-dashed border-gray-100 rounded-2xl bg-white">
-            Haz clic en "Consultar" o en las acciones para cargar los módulos operativos de la base de datos de AWS.
+            Haz clic en "Consultar" o en las acciones para cargar los módulos operativos de la base de datos de AWS[cite: 62].
           </div>
         )}
       </div>

@@ -4,7 +4,7 @@ import { Modal } from "./Modal";
 import { FormCierreDespacho } from "./FormCierreDespacho";
 
 
-const urlbasedespachos = import.meta.env.VITE_API_URL_DESPACHOS || "http://192.168.320/api/v1/despachos";
+const urlbasedespachos = import.meta.env.VITE_API_URL_DESPACHOS;
 
 export const TableDespachos = () => {
   const [despachos, setDespachos] = useState([]);
