@@ -28,7 +28,7 @@ services:
     networks:
       - innovatech-net
     volumes:
-      - db_despachos_persistente:/var/lib/mysql # REQUERIMIENTO IE3: Persistencia de Despachos
+      - db_despachos_persistente:/var/lib/mysql # Persistencia de Despachos
     restart: always
 
   # Microservicio de Ventas
@@ -75,9 +75,6 @@ services:
     container_name: front-despacho-container
     ports:
       - "80:80" # Accesible públicamente por el puerto HTTP estándar
-    depends_on:
-      - back-ventas
-      - back-despachos
     networks:
       - innovatech-net
     restart: always
