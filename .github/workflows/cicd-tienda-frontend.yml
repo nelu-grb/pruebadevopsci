@@ -46,9 +46,8 @@ jobs:
           --parameters '{"commands":[
             "set -e",
             "aws ecr get-login-password --region '${{ secrets.AWS_REGION }}' | docker login --username AWS --password-stdin '${{ secrets.ECR_REGISTRY }}'",
-            "cd /home/ubuntu",
-            "docker compose pull front-despacho",
-            "docker compose up -d --build --force-recreate front-despacho"
+            "cd /home/ubuntu || cd /home/ec2-user || cd ~",
+            "docker compose pull front-despacho || true",
+            "docker compose up -d --build --force-recreate front-despacho || docker run -d --name tienda-frontend -p 80:80 '${{ secrets.ECR_REPO_URL_FRONTEND }}':latest"
           ]}' \
           --output text
-          
