@@ -30,15 +30,13 @@ jobs:
       run: |
         cd frontend
         aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPO_URL_FRONTEND }}
-        docker pull ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest || true
-
-        # 1. Extraer de forma automática las IPs de tu archivo .env local
+        
         VVENTAS=$(grep VITE_API_URL_VENTAS .env | cut -d '=' -f2)
         VDESPACHOS=$(grep VITE_API_URL_DESPACHOS .env | cut -d '=' -f2)
 
-        # 2. Build inyectando las variables del .env dinámicamente
+        # Forzar compilación limpia sin caché para asegurar las nuevas IPs
         docker build \
-          --cache-from ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest \
+          --no-cache \
           --build-arg VITE_API_URL_VENTAS="$VVENTAS" \
           --build-arg VITE_API_URL_DESPACHOS="$VDESPACHOS" \
           -t tienda-frontend .
