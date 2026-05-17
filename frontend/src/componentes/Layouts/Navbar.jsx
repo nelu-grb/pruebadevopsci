@@ -16,7 +16,7 @@ function Navbar({ vistaActual, setVistaActual }) {
               vistaActual === 'despachos' ? 'bg-teal-800' : 'hover:bg-teal-700'
             }`}
           >
-            🏠 Inicio / Despachos
+            Inicio / Despachos
           </button>
         </li>
         <li>
