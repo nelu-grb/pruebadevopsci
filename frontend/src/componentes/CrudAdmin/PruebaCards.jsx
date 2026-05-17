@@ -27,8 +27,8 @@ export const PruebaCards = () => {
     await axios.post(`${API_URL_VENTAS}`, {
       direccionCompra: direccion,
       valorCompra: parseInt(valor),
-      fechaCompra: new Date().toISOString().split('T'), // 🚨 CORREGIDO: Se añade para enviar solo YYYY-MM-DD
-      despachoGenerado: false // 🚨 REVISAR: Asegúrate de si es 'despachoGenerado' o 'despachoGenerated' según tu Spring Boot
+      fechaCompra: new Date().toISOString().split('T'),
+      despachoGenerado: false // 
     });
 
     alert("🛒 ¡Orden de Compra registrada con éxito en AWS! Haz clic en 'Consultar' para verla.");
