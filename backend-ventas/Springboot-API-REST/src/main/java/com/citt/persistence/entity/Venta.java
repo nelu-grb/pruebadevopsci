@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Entity
 public class Venta {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idVenta;
     
     @NotBlank(message = "La dirección es obligatoria")
