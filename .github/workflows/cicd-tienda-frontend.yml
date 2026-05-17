@@ -31,14 +31,11 @@ jobs:
         cd frontend
         aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPO_URL_FRONTEND }}
         
-        VVENTAS=$(grep VITE_API_URL_VENTAS .env | cut -d '=' -f2)
-        VDESPACHOS=$(grep VITE_API_URL_DESPACHOS .env | cut -d '=' -f2)
-
-        # Forzar compilación limpia sin caché para asegurar las nuevas IPs
+        # Inyectar las IPs reales de hoy directamente de forma manual y segura
         docker build \
           --no-cache \
-          --build-arg VITE_API_URL_VENTAS="$VVENTAS" \
-          --build-arg VITE_API_URL_DESPACHOS="$VDESPACHOS" \
+          --build-arg VITE_API_URL_VENTAS="http://98.90.195.9:8080/api/v1/ventas" \
+          --build-arg VITE_API_URL_DESPACHOS="http://13.221.110.148:8082/api/v1/despachos" \
           -t tienda-frontend .
 
         docker tag tienda-frontend:latest ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest
