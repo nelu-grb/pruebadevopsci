@@ -29,6 +29,7 @@ jobs:
     - name: Build imagen Frontend y push a ECR  (con cache)
       run: |
         cd frontend
+        aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPO_URL_FRONTEND }}
         docker pull ${{ secrets.ECR_REPO_URL_FRONTEND }}:latest || true
 
         # Build usando cache para ir más rápido
