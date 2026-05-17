@@ -6,8 +6,20 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copiar el código y generar la carpeta 'dist'
+# Copiar el código fuente
 COPY . .
+
+# 🚨 EL AJUSTE CLAVE: Eliminar el .env físico (si existe) para obligar a usar las variables de GitHub
+RUN rm -f .env .env.local .env.production || true
+
+# 🚨 EL AJUSTE CLAVE: Recibir e inyectar las variables justo ANTES del build de Vite
+ARG VITE_API_URL_VENTAS
+ARG VITE_API_URL_DESPACHOS
+
+ENV VITE_API_URL_VENTAS=$VITE_API_URL_VENTAS
+ENV VITE_API_URL_DESPACHOS=$VITE_API_URL_DESPACHOS
+
+# Generar la carpeta 'dist' con las IPs dinámicas incrustadas en el JavaScript
 RUN npm run build
 
 # ETAPA 2: Servidor Web ligero (Nginx)
